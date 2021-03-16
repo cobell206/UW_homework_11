@@ -8,9 +8,9 @@ const PORT = process.env.PORT || 3001
 const app = express()
 
 // Initialize the db.json file if it doesn't exit
-if (!fs.existsSync('db.json')) {
+if (!fs.existsSync('./public/db/db.json')) {
     const notes = []
-    fs.writeFileSync('db.json', JSON.stringify(notes), (err) => console.log(err));
+    fs.writeFileSync('./public/db/db.json', JSON.stringify(notes), (err) => console.log(err));
 }
 
 // Initialize app
@@ -32,7 +32,7 @@ app.get('/notes', (req, res) => {
 
 // GET for api notes
 app.get('/api/notes', (req, res) => {
-    let notes_ = JSON.parse(fs.readFileSync('db.json'))
+    let notes_ = JSON.parse(fs.readFileSync('./public/db/db.json'))
     console.log('pulling files');
     return res.json(notes_)
 })
@@ -40,10 +40,10 @@ app.get('/api/notes', (req, res) => {
 // POST for api notes
 app.post('/api/notes', (req, res) => {
     let new_note = req.body
-    let notes_ = JSON.parse(fs.readFileSync('db.json'))
+    let notes_ = JSON.parse(fs.readFileSync('./public/db/db.json'))
     new_note.id = notes_.length + 1
     notes_.push(new_note)
-    fs.writeFileSync('db.json', JSON.stringify(notes_), (err) => console.log(err))
+    fs.writeFileSync('./public/db/db.json', JSON.stringify(notes_), (err) => console.log(err))
     console.log('Returning notes from POST');
     return res.json(notes_)
 })
@@ -52,7 +52,7 @@ app.post('/api/notes', (req, res) => {
 app.delete('/api/notes/:id', (req, res) => {
     let del_id = req.params.id
     // let del_id = req.body
-    let notes_ = JSON.parse(fs.readFileSync('db.json'))
+    let notes_ = JSON.parse(fs.readFileSync('./public/db/db.json'))
 
     // Loop through all notes and delete if it matches ID
     for (var i=0; i<notes_.length; i++) {
@@ -60,7 +60,7 @@ app.delete('/api/notes/:id', (req, res) => {
             notes_.splice(i,1)
         } 
     }
-    fs.writeFileSync('db.json', JSON.stringify(notes_), (err) => console.log(err))
+    fs.writeFileSync('./public/db/db.json', JSON.stringify(notes_), (err) => console.log(err))
     console.log('Returning notes from DELETE');
     return res.json(notes_)
 })
